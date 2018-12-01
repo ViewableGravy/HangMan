@@ -6,6 +6,8 @@ The following codebase is a simple implementation of Hangman.
 
 
 ## Todo
+* AddLetterToWord(Computer) 
+    - should only add to a position if there is nothing already in that position of the word
 * Re-implement Letter checking.
 * Decouple the classes.
 * Increase Cohesion in classes.
