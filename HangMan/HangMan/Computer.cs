@@ -14,22 +14,67 @@ namespace HangMan
         public int wordlength;
         private char[] _word;
         private Player _player;
-        private ArrayList _ttlWords;
-
-        //private Arraylist<char> alphabet = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
+        //private ArrayList _ttlWords;
+        
         private ArrayList alphabet = new ArrayList("abcdefghijklmnopqrstuvwxyz".ToCharArray());
 
         public Computer(Player player)
         {
             _player = player;
             GetGameInformation();
-            ReadInTextFile();
         }
 
         public void GetGameInformation()
         {
             wordlength = _player.WordLength();
             _word = new char[wordlength];
+        }
+        
+        private int CalculateFromArray()
+        {
+            // { "s" , "\0", "\0", "s", "\0"}
+            // next time on the gravy channel
+            // find most common letter and then guess that number rather than randomly
+
+            return 0;
+        }
+
+        // checks if a letter is correct and if it is adds it to the word
+        public void GuessLetter()
+        {
+            char letter = ChooseLetter();
+
+            if (IsLetterCorrect(letter))
+                AddLetterToWord(letter);
+        }
+
+        //checks if a letter is correct
+        public bool IsLetterCorrect(char letter)
+        {
+            alphabet.Remove(letter);
+            string userResponse = _player.GetResponse("is the letter " + letter + " in your word? type yes or no ");
+            bool exit = false;
+            while (!exit)
+            {
+                if (userResponse == "yes")
+                    return true;
+                else if (userResponse == "no")
+                    return false;
+                else
+                    userResponse = _player.GetResponse("Please enter Yes or No");
+            }
+            return false;
+        }
+
+        // adds a letter to a word
+        public void AddLetterToWord(char letter)
+        {
+            string str = _player.GetResponse("type the position(s) that the letter occurs: separate multiple values with commas. e.g. 1,2,4: ");
+            string[] positions = str.Split(',');
+            foreach (string number in positions)
+            {
+                _word[(Convert.ToInt32(number) - 1)] = letter;
+            }
         }
 
         public char ChooseLetter()
@@ -44,59 +89,10 @@ namespace HangMan
             return rnd.Next(0, alphabet.Count);
         }
 
-        private int CalculateFromArray()
-        {
-            // { "s" , "\0", "\0", "s", "\0"}
-            // next time on the gravy channel
-            // find most common letter and then guess that number rather than randomly
-
-            return 0;
-        }
-        
-        public void IsLetterCorrect()
-        {
-            string iscorrectletter;
-            char chr = ChooseLetter();
-            Console.Write("is the letter " + chr + " in your word? type yes or no ");
-            alphabet.Remove(chr);
-            bool exit = false;
-            while (!exit)
-            {
-                iscorrectletter = Console.ReadLine();
-                if (iscorrectletter == "yes")
-                {
-                    Console.Write("type the position(s) position in the word the letter is with commas between each position number ");
-                    string str = Console.ReadLine();
-
-                    string[] arr = str.Split(',');
-                    foreach (string strr in arr)
-                    {
-                        _word[(Convert.ToInt32(strr)-1)] = chr;
-                    }
-                    exit = true;
-                }
-                else if (iscorrectletter == "no")
-                {
-                    exit = true;
-                }
-                else
-                    Console.WriteLine("Please enter Yes or No");
-            }
-
-        }
-
         public char[] Word
         {
             get { return _word; }
         }
 
-        public void ReadInTextFile()
-        {
-            _ttlWords = new ArrayList(File.ReadAllLines("C:/Users/Lleyton/Desktop/Coding/C#/Hangman/words.txt").Where(x => x.Length.Equals(wordlength)).ToList());
-            //foreach (string str in _ttlWords)
-            //{
-            //    Console.WriteLine(str);
-            //}
-        }
     }
 }

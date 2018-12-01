@@ -19,6 +19,12 @@ namespace HangMan
             Console.WriteLine("Please Enter your word length");
             return Convert.ToInt32(Console.ReadLine());
         }
+
+        public string GetResponse(string request)
+        {
+            Console.Write(request);
+            return Console.ReadLine();
+        }
         
     }
 }

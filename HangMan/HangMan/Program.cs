@@ -21,7 +21,8 @@ namespace HangMan
             {
                 try
                 {
-                    computer.IsLetterCorrect();
+                    computer.GuessLetter();
+
                     foreach (char ltr in computer.Word)
                     {
                         if (ltr == '\0')
