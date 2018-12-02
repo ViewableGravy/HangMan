@@ -43,14 +43,27 @@ namespace HangMan
         public void GuessLetter()
         {
             char letter = ChooseLetter();
-            if (IsLetterCorrect(letter))
+            if (LetterIsCorrect(letter))
                 AddLetterToWord(letter);
         }
 
-        //checks if a letter is correct
-        public bool IsLetterCorrect(char letter)
+        public char ChooseLetter()
         {
+            int letterAmount = CalculateBasic();
+            char letter = (char)alphabet[letterAmount];
             alphabet.Remove(letter);
+            return letter;
+        }
+
+        public int CalculateBasic()
+        {
+            Random rnd = new Random();
+            return rnd.Next(0, alphabet.Count);
+        }
+
+        //checks if a letter is correct
+        public bool LetterIsCorrect(char letter)
+        {
             return _player.BoolConfirmation("is the letter " + letter + " in your word? type yes or no ");
         }
 
@@ -172,18 +185,6 @@ namespace HangMan
             if (isNumeric)
                 return true;
             return false;
-        }
-
-        public char ChooseLetter()
-        {
-            int letterAmount = CalculateBasic();
-            return (char)alphabet[letterAmount];
-        }
-
-        public int CalculateBasic()
-        {
-            Random rnd = new Random();
-            return rnd.Next(0, alphabet.Count);
         }
 
         public char[] Word

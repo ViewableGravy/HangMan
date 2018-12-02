@@ -15,13 +15,14 @@ namespace HangMan
             Computer computer = new Computer(_player);
 
             bool endgame = false;
-            int guesslimit = 5;
-            //char currentletter;
+            int guesslimit = 10;
+
             while (!endgame)
             {
                 try
                 {
                     computer.GuessLetter();
+                    guesslimit--;
 
                     foreach (char ltr in computer.Word)
                     {
@@ -47,7 +48,8 @@ namespace HangMan
                         Console.WriteLine("Congrats broskie, you won");
                     }
 
-                } catch
+                }
+                catch
                 {
                     Console.WriteLine("GameError");
                     Console.ReadLine();
