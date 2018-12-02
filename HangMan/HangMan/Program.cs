@@ -37,7 +37,7 @@ namespace HangMan
                         case "Guess":
                         case "guess":
                             computer.GuessLetter();
-                            _player.ShowGameState(computer);
+                            _player.ShowWordState(computer);
                             break;
                         case "Hangman":
                         case "hangman":
@@ -62,7 +62,7 @@ namespace HangMan
                         endgame = true;
                         Console.WriteLine("The computer won, you're trash");
                     }
-                    if (computer.guessesmade == 11)
+                    if (computer.wrongGuessesMade == 11)
                     {
                         endgame = true;
                         Console.WriteLine("Congrats broskie, you won");

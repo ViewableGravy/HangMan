@@ -14,7 +14,7 @@ namespace HangMan
         public int wordlength;
         private char[] _word;
         private Player _player;
-        public int guessesmade;
+        public int wrongGuessesMade;
         //private ArrayList _ttlWords;
         
         private ArrayList alphabet = new ArrayList("abcdefghijklmnopqrstuvwxyz".ToCharArray());
@@ -29,7 +29,7 @@ namespace HangMan
         {
             wordlength = _player.WordLength();
             _word = new char[wordlength];
-            guessesmade = 0;
+            wrongGuessesMade = 0;
         }
         
         private int CalculateFromArray()
@@ -64,7 +64,7 @@ namespace HangMan
             if (LetterIsCorrect(letter))
                 AddLetterToWord(letter);
             else
-                guessesmade++;
+                wrongGuessesMade++;
         }
 
         private char ChooseLetter()

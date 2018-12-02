@@ -33,7 +33,7 @@ namespace HangMan
             return 0;
         }
 
-        public void ShowGameState(Computer computer)
+        public void ShowWordState(Computer computer)
         {
             foreach (char ltr in computer.Word)
             {
@@ -42,12 +42,24 @@ namespace HangMan
                 else
                     Console.Write(ltr);
             }
-            HangMan.Draw(computer.guessesmade);
+        }
+
+        public void ShowGameState(Computer computer)
+        {
+            HangMan.Draw(computer.wrongGuessesMade);
         }
 
         public void Message(string message)
         {
             Console.WriteLine(message);
+        }
+
+        public static void Message(string[] message)
+        {
+            foreach (string str in message)
+            {
+                Console.WriteLine(str);
+            }
         }
 
         public string GetResponse(string request)
