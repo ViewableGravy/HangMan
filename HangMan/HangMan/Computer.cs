@@ -43,7 +43,6 @@ namespace HangMan
         public void GuessLetter()
         {
             char letter = ChooseLetter();
-
             if (IsLetterCorrect(letter))
                 AddLetterToWord(letter);
         }
@@ -52,29 +51,127 @@ namespace HangMan
         public bool IsLetterCorrect(char letter)
         {
             alphabet.Remove(letter);
-            string userResponse = _player.GetResponse("is the letter " + letter + " in your word? type yes or no ");
-            bool exit = false;
-            while (!exit)
-            {
-                if (userResponse == "yes")
-                    return true;
-                else if (userResponse == "no")
-                    return false;
-                else
-                    userResponse = _player.GetResponse("Please enter Yes or No");
-            }
-            return false;
+            return _player.BoolConfirmation("is the letter " + letter + " in your word? type yes or no ");
         }
 
         // adds a letter to a word
         public void AddLetterToWord(char letter)
         {
-            string str = _player.GetResponse("type the position(s) that the letter occurs: separate multiple values with commas. e.g. 1,2,4: ");
-            string[] positions = str.Split(',');
+            string message = "type the position(s) that the letter occurs: separate multiple values with commas: ";
+            string[] positions = null;
+            bool exit = false;
+
+            while (!exit)
+            {
+                while (!exit)
+                {
+                    //gets the positions from the user
+                    string stringPositions = _player.GetResponse(message);
+
+                    //converts the string to a set of strings containing each position
+                    positions = ConvertToPositionsArray(stringPositions);
+
+                    if (positions == null)
+                    {
+                        _player.Message("There was an input error, please enter your value(s) again");
+                        exit = false;
+                    }
+                    else
+                        exit = true;
+                }
+                
+                exit = _player.BoolConfirmation("put " + letter + " in position(s) " + GetPositionString(positions) + ": ");
+                if (exit == false)
+                    message = "Where would you like " + letter + " then?: ";
+            }
             foreach (string number in positions)
             {
                 _word[(Convert.ToInt32(number) - 1)] = letter;
             }
+            
+        }
+
+        private string GetPositionString(string[] positions)
+        {
+            string temp = "";
+            if (positions.Length == 1)
+            {
+                return positions[0];
+            }
+            else if (positions.Length == 2) 
+            {
+                return positions[0] + " and " + positions[1];
+            }
+            else
+            {
+                for (int i = 0; i < positions.Length; i++)
+                {
+                    temp = temp + positions[i];
+                    if (i == positions.Length - 1)
+                        return temp;
+                    if (i == positions.Length - 2)
+                    {
+                        temp = temp + " and ";
+                    }
+                    else
+                        temp = temp + ", ";
+                }
+                return null;
+            }
+        }
+
+        private string[] ConvertToPositionsArray(string userIndicatedPositions)
+        {
+            string[] positions = userIndicatedPositions.Split(',');
+            
+            //checks that the converted array is valid including the inputs
+            if (!CheckPositions(positions))
+                return null;
+            
+            return positions;
+        }
+
+        public bool CheckPositions(string[] positions)
+        {
+            // checks there is an appropriate amount of letter positions chosen
+            if (positions.Length > wordlength)
+                return false;
+            
+            //checks that each input is a number
+            foreach (string number in positions)
+            {
+                if (!isNumber(number))
+                    return false;
+            }
+            
+            int[] numbers = new int[positions.Length];
+            for (int i = 0; i < positions.Length; i++)
+            {
+                //adds number to numbers in index i
+                numbers[i] = Convert.ToInt32(positions[i]);
+
+                //checks that the number is shorter than the word length
+                if (numbers[i] > wordlength)
+                    return false;
+                   
+                // checks that there is not already a letter in the position
+                for (int j = 0; j < Word.Length; j++)
+                {
+                    if (Word[j] != '\0' && j == numbers[i] - 1)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public bool isNumber(string number)
+        {
+            var isNumeric = int.TryParse(number, out int n);
+            if (isNumeric)
+                return true;
+            return false;
         }
 
         public char ChooseLetter()

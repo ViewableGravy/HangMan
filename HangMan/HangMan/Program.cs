@@ -49,6 +49,8 @@ namespace HangMan
 
                 } catch
                 {
+                    Console.WriteLine("GameError");
+                    Console.ReadLine();
                     endgame = true;
                 }
 
