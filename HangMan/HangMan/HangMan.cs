@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace HangMan
 {
-    public class HangMan
+    public static class HangMan
     {
-        public HangMan()
+
+        public static void Draw(int guessesleft)
         {
+
 
         }
 

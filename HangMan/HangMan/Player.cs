@@ -33,6 +33,18 @@ namespace HangMan
             return 0;
         }
 
+        public void ShowGameState(Computer computer)
+        {
+            foreach (char ltr in computer.Word)
+            {
+                if (ltr == '\0')
+                    Console.Write(".");
+                else
+                    Console.Write(ltr);
+            }
+            HangMan.Draw(computer.guessesmade);
+        }
+
         public void Message(string message)
         {
             Console.WriteLine(message);
@@ -43,6 +55,15 @@ namespace HangMan
             Console.Write(request);
             return Console.ReadLine();
         }
+
+        public string GetResponse(string[] request)
+        {
+            foreach (string str in request)
+            {
+                Console.WriteLine(str);
+            }
+            return Console.ReadLine();
+        } 
 
         public bool BoolConfirmation(string message)
         {

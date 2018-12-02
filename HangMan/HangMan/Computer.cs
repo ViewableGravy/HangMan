@@ -14,6 +14,7 @@ namespace HangMan
         public int wordlength;
         private char[] _word;
         private Player _player;
+        public int guessesmade;
         //private ArrayList _ttlWords;
         
         private ArrayList alphabet = new ArrayList("abcdefghijklmnopqrstuvwxyz".ToCharArray());
@@ -28,28 +29,45 @@ namespace HangMan
         {
             wordlength = _player.WordLength();
             _word = new char[wordlength];
+            guessesmade = 0;
         }
         
         private int CalculateFromArray()
         {
-            // { "s" , "\0", "\0", "s", "\0"}
-            // next time on the gravy channel
-            // find most common letter and then guess that number rather than randomly
+            /*
+            Guessing first letter
+                1 get every word that is the a correct length
+                2 find the most occuring letter
+                    a. find if a letter occurs in a word
+                        1. only count it once per word (do not count again if it occurs more than once in a word)
+                    b. sort by count of the number of words that each letter occurs in
+                        1. since each letter is only incremented by one if occurring in a word this is just
+                           from most occurring to least occurring
+                3. if letter guessed is wrong
+                    a. eliminate the letter as a guessable option
+                    b. eliminate words that contain the letter
+                    c. repeat step 2 with the new parameters
 
+            this method was derived from the following article
+            http://datagenetics.com/blog/april12012/index.html
+            
+
+            guessing second letter
+            */
             return 0;
         }
 
         // checks if a letter is correct and if it is adds it to the word
-        public void GuessLetter(ref int guessesLeft)
+        public void GuessLetter()
         {
             char letter = ChooseLetter();
             if (LetterIsCorrect(letter))
                 AddLetterToWord(letter);
             else
-                guessesLeft--;
+                guessesmade++;
         }
 
-        public char ChooseLetter()
+        private char ChooseLetter()
         {
             int letterAmount = CalculateBasic();
             char letter = (char)alphabet[letterAmount];
@@ -57,20 +75,21 @@ namespace HangMan
             return letter;
         }
 
-        public int CalculateBasic()
+        //guesses a letter randomly
+        private int CalculateBasic()
         {
             Random rnd = new Random();
             return rnd.Next(0, alphabet.Count);
         }
 
         //checks if a letter is correct
-        public bool LetterIsCorrect(char letter)
+        private bool LetterIsCorrect(char letter)
         {
             return _player.BoolConfirmation("is the letter " + letter + " in your word? type yes or no ");
         }
 
         // adds a letter to a word
-        public void AddLetterToWord(char letter)
+        private void AddLetterToWord(char letter)
         {
             string message = "type the position(s) that the letter occurs: separate multiple values with commas: ";
             string[] positions = null;
@@ -146,7 +165,7 @@ namespace HangMan
             return positions;
         }
 
-        public bool CheckPositions(string[] positions)
+        private bool CheckPositions(string[] positions)
         {
             // checks there is an appropriate amount of letter positions chosen
             if (positions.Length > wordlength)
@@ -181,7 +200,7 @@ namespace HangMan
             return true;
         }
 
-        public bool isNumber(string number)
+        private bool isNumber(string number)
         {
             var isNumeric = int.TryParse(number, out int n);
             if (isNumeric)
