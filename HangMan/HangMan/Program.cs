@@ -21,8 +21,7 @@ namespace HangMan
             {
                 try
                 {
-                    computer.GuessLetter();
-                    guesslimit--;
+                    computer.GuessLetter(ref guesslimit);
 
                     foreach (char ltr in computer.Word)
                     {

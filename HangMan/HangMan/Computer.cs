@@ -40,11 +40,13 @@ namespace HangMan
         }
 
         // checks if a letter is correct and if it is adds it to the word
-        public void GuessLetter()
+        public void GuessLetter(ref int guessesLeft)
         {
             char letter = ChooseLetter();
             if (LetterIsCorrect(letter))
                 AddLetterToWord(letter);
+            else
+                guessesLeft--;
         }
 
         public char ChooseLetter()
